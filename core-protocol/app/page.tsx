@@ -10,3 +10,7 @@ export default function Home() {
     </>
   )
 }
+
+declare global {
+  interface Window { aptos: any; }
+}

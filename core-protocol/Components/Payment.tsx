@@ -1,14 +1,29 @@
 'use client'
 
 import React, { useState } from 'react';
+import { Types, AptosClient } from 'aptos';
+
+// Create an AptosClient to interact with devnet.
+const client = new AptosClient('https://fullnode.devnet.aptoslabs.com/v1');
+
+
 
 
 function WalletPayment() {
+    const [address, setAddress] = React.useState<string | null>(null);
+
+    const init = async() => {
+        const { address, publicKey } = await window.aptos.connect();
+        setAddress(address);
+      }
+
+      console.log(address)
+
     return (
         <div>
  <div className='flex justify-between'>
                 <div className='text-l sm:text-2xl'>
-                    Pay the testshop 
+                    Pay the testshop    
                 </div>
                 <div>
                     Time remaining
@@ -47,10 +62,12 @@ function WalletPayment() {
             </div>
 
             <div className='center flex w-full justify-center mt-28'>
-                <button className='border text-black w-full border-gray-800	 rounded-xl h-12'> Connect Wallet </button>
-            </div>
-            <div className='center flex w-full justify-center mt-2'>
-                <button className='text-white w-full bg-black rounded-xl h-12'> Pay now </button>
+            {
+                    !address && <button onClick={init} className='border text-black w-full border-gray-800 rounded-xl h-12'> Connect Wallet </button>
+                }
+                {
+                    address && <button className='text-white w-full bg-black rounded-xl h-12'> Pay now </button>
+                }
             </div>
 
             
@@ -135,7 +152,7 @@ const Payment = () => {
                 Pay With Wallet
             </button>
             <button 
-                disabled 
+                disabled    
                 className={`text-black text-sm w-1/2 h-9 cursor-not-allowed opacity-50`}>
                 Coming Soon...
             </button>
