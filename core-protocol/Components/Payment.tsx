@@ -128,18 +128,19 @@ const Payment = () => {
 
         <div className='bg-white rounded-3xl w-full p-8'>
 
-            <div className='flex mb-8 border rounded-lg bg-gray-300 overflow-hidden'>
-                <button 
-                    onClick={() => setActiveTab('wallet')}
-                    className={`text-black text-sm w-1/2 border-gray-800 h-9 ${activeTab === 'wallet' ? 'bg-white' : ''}`}>
-                    Pay With Wallet
-                </button>
-                <button 
-                    onClick={() => setActiveTab('qr')}
-                    className={`text-black text-sm w-1/2 h-9 ${activeTab === 'qr' ? 'bg-white' : ''}`}>
-                    Pay With QR Code
-                </button>
-            </div>
+        <div className='flex mb-8 border rounded-lg bg-gray-300 overflow-hidden'>
+            <button 
+                onClick={() => setActiveTab('wallet')}
+                className={`text-black text-sm w-1/2 border-gray-800 h-9 ${activeTab === 'wallet' ? 'bg-white' : ''}`}>
+                Pay With Wallet
+            </button>
+            <button 
+                disabled 
+                className={`text-black text-sm w-1/2 h-9 cursor-not-allowed opacity-50`}>
+                Coming Soon...
+            </button>
+        </div>
+
 
             {activeTab === 'wallet' && <WalletPayment />}
             {activeTab === 'qr' && <div><QRPayment /></div>}
