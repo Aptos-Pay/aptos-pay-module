@@ -10,7 +10,7 @@ const TransactionProgress = () => {
     return (
         <div className="max-w-screen-sm flex flex-wrap items-center justify-between mx-auto p-4 mt-4 md:mt-16">
             <div className='bg-white rounded-3xl w-full p-4 md:p-8'>
-                <div className='text-center text-sm md:text-l lg:text-2xl'> 
+                <div className='text-center text-2xl'> 
                     Transaction in progress 
                 </div>
                 <div className="flex flex-col md:flex-row items-center justify-between w-full mt-5 md:mt-10 space-y-4 md:space-y-0"> 
