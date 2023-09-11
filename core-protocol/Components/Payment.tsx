@@ -17,7 +17,7 @@ function WalletPayment() {
             </div>
 
             <div className='text-xl sm:text-2xl'>
-                $1,456.67
+                $1,456.695
             </div>
 
             <div className='text-sm sm:text-l'>
@@ -73,7 +73,7 @@ function QRPayment() {
             </div>
 
             <div className='text-xl sm:text-2xl'>
-                $1,456.67
+                $1,456.695
             </div>
 
             <div className='text-sm sm:text-l'>
