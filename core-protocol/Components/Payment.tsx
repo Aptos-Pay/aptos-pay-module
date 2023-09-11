@@ -3,6 +3,8 @@
 import React, { useState } from 'react';
 
 const Payment = () => {
+    const [activeTab, setActiveTab] = useState('wallet');
+
 
   return (
     <div className="max-w-screen-sm flex flex-wrap items-center justify-between mx-auto p-4 mt-16">
@@ -10,9 +12,19 @@ const Payment = () => {
 
               <div className='bg-white rounded-xl w-full p-8'>
 
-                <div>
-                    {/* Tab */}
-                </div>
+            <div className='flex mb-8 border rounded-lg bg-gray-200 overflow-hidden'>
+                <button 
+                    onClick={() => setActiveTab('wallet')}
+                    className={`text-black w-1/2 border-gray-800 h-8 ${activeTab === 'wallet' ? 'bg-white' : ''}`}>
+                    Pay With Wallet
+                </button>
+                <button 
+                    onClick={() => setActiveTab('qr')}
+                    className={`text-black w-1/2 h-8 ${activeTab === 'qr' ? 'bg-white' : ''}`}>
+                    Pay With QR Code
+                </button>
+            </div>
+
 
 
 
