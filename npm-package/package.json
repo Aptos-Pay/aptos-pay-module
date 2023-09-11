@@ -1,11 +1,15 @@
 {
   "name": "aptos-pay",
-  "version": "1.0.5",
+  "version": "1.0.6",
+  "types": "index.d.ts",
   "description": "Payments protocol for Aptos",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "AptosPayTeam",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.2.2"
+  }
 }
