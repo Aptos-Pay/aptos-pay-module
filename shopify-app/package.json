@@ -1,5 +1,6 @@
 {
-  "name": "aptos-pay",
+  "name": "@aptos-pay/shopify-app",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "build": "NODE_ENV=production remix build",

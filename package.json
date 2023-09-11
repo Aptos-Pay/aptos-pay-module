@@ -1,0 +1,15 @@
+{
+  "name": "@aptos-pay/monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "yarn workspace @aptos-pay/core-protocol dev",
+    "build": "yarn workspace @aptos-pay/core-protocol build",
+    "shopify-dev": "yarn workspace @aptos-pay/shopify-app dev"
+  },
+  "workspaces": {
+    "packages": [
+      "./*"
+    ]
+  }
+}
