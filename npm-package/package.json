@@ -1,6 +1,6 @@
 {
   "name": "aptos-pay",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Payments protocol for Aptos",
   "main": "index.js",
   "scripts": {
