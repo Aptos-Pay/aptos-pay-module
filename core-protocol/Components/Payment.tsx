@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 
+
 function WalletPayment() {
     return (
         <div>
@@ -59,6 +60,17 @@ function WalletPayment() {
 }
 
 function QRPayment() {
+    const [copySuccess, setCopySuccess] = useState('');
+
+    const copyToClipboard = (text: string) => {
+        navigator.clipboard.writeText(text)
+            .then(() => {
+                setCopySuccess('Address copied!');
+                setTimeout(() => setCopySuccess(''), 2000);
+            })
+            .catch(err => console.error('Failed to copy text: ', err));
+    };
+
     return (
         <div>
  <div className='flex justify-between'>
@@ -83,9 +95,11 @@ function QRPayment() {
             <div className='place-content-center flex mt-5'>
                 <img src='https://via.placeholder.com/250' />
             </div>
-            <div className='place-content-center flex'>
-                <p>0x71ed1....1b24975</p>
+            <div className='place-content-center flex flex-col items-center'>
+                <p className="cursor-pointer" onClick={() => copyToClipboard('0x71ed1....1b24975')}>0x71ed1....1b24975</p>
+                {copySuccess && <div className='text-sm text-green-500 mt-2'>{copySuccess}</div>}
             </div>
+
 
 
             <div className='p-2'>
