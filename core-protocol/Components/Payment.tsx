@@ -20,10 +20,11 @@ function WalletPayment() {
                 $1,456.67
             </div>
 
-            <div className='text-xl sm:text-2xl mt-10 flex justify-between'>
-                <div>
-                    264.29 APT
-                </div>
+            <div className='text-sm sm:text-l'>
+            ~264.29 APT
+            </div>
+
+            <div className='text-xl sm:text-2xl mt-2 flex justify-between'>
 
                     {/*<div>
                     Pay with
@@ -44,13 +45,60 @@ function WalletPayment() {
                 </div>
             </div>
 
-            <div className='center flex w-full justify-center mt-24'>
+            <div className='center flex w-full justify-center mt-28'>
                 <button className='border text-black w-full border-gray-800	 rounded-xl h-12'> Connect Wallet </button>
             </div>
             <div className='center flex w-full justify-center mt-2'>
                 <button className='text-white w-full bg-black rounded-xl h-12'> Pay now </button>
             </div>
 
+            
+        </div>
+
+    )
+}
+
+function QRPayment() {
+    return (
+        <div>
+ <div className='flex justify-between'>
+                <div className='text-l sm:text-2xl'>
+                    Pay the testshop 
+                </div>
+                <div>
+                    Time remaining
+                    <p className='text-red-600 '>09:59</p>
+                </div>
+
+            </div>
+
+            <div className='text-xl sm:text-2xl'>
+                $1,456.67
+            </div>
+
+            <div className='text-sm sm:text-l'>
+            ~264.29 APT
+            </div>
+
+            <div className='place-content-center flex mt-5'>
+                <img src='https://via.placeholder.com/250' />
+            </div>
+            <div className='place-content-center flex'>
+                <p>0x71ed1....1b24975</p>
+            </div>
+
+
+            <div className='p-2'>
+                <div className='flex justify-between'>
+                    <p className='text-xl'> Cart </p>
+                    <p className='text-xl'> $1,456.67 </p>
+                </div>
+
+                <div className='flex justify-between'>
+                    <p className='text-xl'> Transaction Fee </p>
+                    <p className='text-xl'> $0.025 </p>
+                </div>
+            </div>
             
         </div>
 
@@ -80,7 +128,7 @@ const Payment = () => {
             </div>
 
             {activeTab === 'wallet' && <WalletPayment />}
-            {activeTab === 'qr' && <div>QR</div>}
+            {activeTab === 'qr' && <div><QRPayment /></div>}
 
         </div>
     </div>
