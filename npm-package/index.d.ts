@@ -4,16 +4,17 @@ declare function getTempWallet(): {
   publicKeyHex: string;
 };
 declare function getBalance(address: string): Promise<string>;
-declare function performTx(
-  orderId: string,
+declare function createOrder(
   amount: number,
-  receiver: string,
-  sender: string,
-  privateKey: string
-);
+  privateKey: string,
+  contractAddress: string
+): Promise<{
+  success: boolean;
+  orderId: number;
+}>;
 
 declare namespace AptosPay {
-  export { getTempWallet, getBalance, performTx };
+  export { getTempWallet, getBalance, createOrder };
 }
 
 export = AptosPay;

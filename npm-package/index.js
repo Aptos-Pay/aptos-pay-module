@@ -10,27 +10,8 @@ function deployContract() {
   // check if contract is deployed, if not, deploy it
 }
 
-async function performTx(orderId, amount, receiver, sender, privateKey) {
-  await deployContract();
-  const sendInitializationTx = await sendInitializationTx(
-    orderId,
-    amount,
-    receiver,
-    sender,
-    privateKey
-  );
-
-  return walletData;
-}
-
-async function sendInitializationTx(
-  orderId,
-  amount,
-  receiver,
-  sender,
-  privateKey
-) {
-  const client = new AptosClient('https://fullnode.testnet.aptoslabs.com');
+async function createOrder(amount, privateKey, contractAddress) {
+  const client = new AptosClient('https://fullnode.devnet.aptoslabs.com');
 
   if (!privateKey.startsWith('0x')) {
     privateKey = '0x' + privateKey;
@@ -40,22 +21,48 @@ async function sendInitializationTx(
   const adminWallet = new AptosAccount(privateKeyBytes);
   const walletData = adminWallet.toPrivateKeyObject();
 
-  // const rawTx = await client.generateTransaction(walletData.address, {
-  //   function: '0x1::coin::transfer', // TODO: ADD REAL FUNCTION NAME
-  //   type_arguments: ['0x1::aptos_coin::AptosCoin'], // TODO: ADD REAL TYPE ARGUMENTS
-  //   arguments: [orderId, receiver, amount],
-  // });
+  const randomValue = new Uint32Array(1);
+  crypto.getRandomValues(randomValue);
+  const min = 1;
+  const max = 99999999999999;
+  const orderId = min + (randomValue[0] % (max - min + 1));
 
-  // const signedTx = client.signTransaction(adminWallet, rawTx);
+  try {
+    const rawTx = await client.generateTransaction(walletData.address, {
+      type: 'entry_function_payload',
+      function: `${contractAddress}::aptospay::create_order`,
+      type_arguments: [],
+      arguments: [orderId, amount],
+    });
 
-  // const submittedTx = client.submitTransaction(signedTx);
+    const submittedTx = await client.signAndSubmitTransaction(
+      adminWallet,
+      rawTx
+    );
 
-  console.log('rawTx', rawTx);
+    const result = await client.waitForTransactionWithResult(submittedTx);
 
-  return walletData;
+    if (result.success === false) {
+      console.log('Transaction Failed');
+      console.log(result.vm_status);
+      return {
+        success: false,
+        orderId: undefined,
+      };
+    }
+    return {
+      success: true,
+      orderId,
+    };
+  } catch (error) {
+    console.log('Error ocurred');
+    console.log(error);
+    return {
+      success: false,
+      orderId: undefined,
+    };
+  }
 }
-
-// async function sendTx
 
 async function getBalance(address) {
   // const provider = new Provider(Network.TESTNET);
@@ -75,5 +82,5 @@ async function getBalance(address) {
 module.exports = {
   getTempWallet,
   getBalance,
-  performTx,
+  createOrder,
 };
