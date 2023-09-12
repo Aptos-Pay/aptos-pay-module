@@ -8,7 +8,7 @@ export async function POST(request: Request) {
     const amount = (await request.json()).amount;
 
     const orderCreationResult = await createOrder(
-      amount,
+      amount * 10 ** 8,
       process.env.PRIVATE_KEY as string,
       process.env.MODULE_ADDRESS as string
     );
