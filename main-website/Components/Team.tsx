@@ -9,7 +9,7 @@ import GitHub from '../Images/github.png';
 
 export default function Team() {
     return (
-        <div>
+        <div className='mb-20'>
             <h1 className="header-text font-bold text-center mb-10">Our Team</h1>
             <div className="flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-20 mb-10">
                 {teamMembers.map((member) => (
