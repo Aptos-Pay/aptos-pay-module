@@ -15,11 +15,56 @@ function WalletPayment() {
     const { push } = useRouter();
     const [address, setAddress] = React.useState<string | null>(null);
     const [timeRemaining, setTimeRemaining] = useState<number | null>(null);
+    const [amount, setAmount] = useState<number | null>(null);
+    const [paymentAddress, setPaymentAddress] = useState<string | null>(null);
 
     const init = async() => {
         const { address, publicKey } = await window.aptos.connect();
         setAddress(address);
+
+        let amountJson = {
+            "amount": 100000000,
+        }
+
+        const response = await fetch('api/createOrder', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json', 
+            },
+            body: JSON.stringify(amountJson), // change this amount
+          });
+        
+          const data = await response.json();
+
+        const paymentAddress = await fetch('api/getPaymentAddressByUid?orderId=' + data.orderId);
+        const paymentAddressData = await paymentAddress.json();
+        setPaymentAddress(paymentAddressData.paymentAddress);
+
       }
+
+      const payNow = async() => {
+        const transaction = {
+            arguments: [paymentAddress, '100000000'],
+            function: '0x1::coin::transfer',
+            type: 'entry_function_payload',
+            type_arguments: ['0x1::aptos_coin::AptosCoin'],
+          };
+
+          try {
+            const pendingTransaction = await(
+              window as any
+              ).aptos.signAndSubmitTransaction(transaction);
+           
+            // In most cases a dApp will want to wait for the transaction, in these cases you can use the typescript sdk
+            const client = new AptosClient('https://devnet.aptoslabs.com');
+            const txn = await client.waitForTransactionWithResult(
+              pendingTransaction.hash,
+            );
+          } catch (error) {
+            // see "Errors"
+          }
+      }
+      
 
 
       useEffect(() => {
@@ -108,7 +153,7 @@ function WalletPayment() {
                     address && 
                     <>
                         <button disabled className='border text-black w-full border-gray-800 rounded-xl h-12 mb-2'>{address.substring(0, 4) + '...' + address.substring(address.length - 4)}</button>
-                        <button className='text-white w-full bg-black rounded-xl h-12'> Pay now </button>
+                        <button onClick={payNow} className='text-white w-full bg-black rounded-xl h-12'> Pay now </button>
                     </>
                 }
             </div>
