@@ -161,10 +161,10 @@ const Payment = () => {
                 className={`text-black text-sm w-1/2 border-gray-800 h-9 ${activeTab === 'wallet' ? 'bg-white' : ''}`}>
                 Pay With Wallet
             </button>
-            <button 
-                disabled    
-                className={`text-black text-sm w-1/2 h-9 cursor-not-allowed opacity-50`}>
-                Coming Soon...
+            <button
+                onClick={() => setActiveTab('qr')}     
+                className={`text-black text-sm w-1/2 h-9 ${activeTab === 'qr' ? 'bg-white' : ''}`}>
+                Pay With QR
             </button>
         </div>
 
