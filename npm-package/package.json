@@ -1,5 +1,5 @@
 {
-  "name": "aptos-pay",
+  "name": "@aptos-pay/npm-package",
   "version": "1.0.7",
   "types": "index.d.ts",
   "description": "Payments protocol for Aptos",
@@ -11,5 +11,8 @@
   "license": "ISC",
   "devDependencies": {
     "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "aptos": "^1.19.0"
   }
 }
