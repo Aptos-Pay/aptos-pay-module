@@ -13,6 +13,9 @@
     --foreground-rgb: 255, 255, 255;
     --background-start-rgb: 0, 0, 0;
     --background-end-rgb: 0, 0, 0;
+    --aptos-green: #2ed8a7;
+    --aptos-green-hover: #3ee9b9;
+
   }
 }
 
@@ -25,3 +28,33 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+.header-text{
+  font-size: 5rem;
+}
+
+.aptos-green{
+  color: var(--aptos-green);
+}
+
+.aptos-green-background{
+  background-color: var(--aptos-green);
+}
+
+.aptos-green-background:hover{
+  background-color: var(--aptos-green-hover);
+}
+
+.aptos-border{
+  border: 1px solid var(--aptos-green);
+}
+
+@media screen and (max-width: 768px) {
+  .header-text{
+    font-size: 3rem;
+  }
+  .main-header {
+    text-align: center !important;
+  }
+}
+
