@@ -70,7 +70,7 @@ const TransactionProgress = () => {
                      <button className='border text-black w-full border-gray-800 rounded-xl h-12 transition-all duration-800 ease-in-out hover:text-white hover:bg-black hover:rounderd-xl'> Cancel transaction </button>
                 </div>
             </div>
-        </div>
+        </div>  
     );
 }
 
