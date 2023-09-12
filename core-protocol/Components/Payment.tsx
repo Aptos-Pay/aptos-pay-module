@@ -1,6 +1,7 @@
 'use client'
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Types, AptosClient } from 'aptos';
 
 // Create an AptosClient to interact with devnet.
@@ -9,15 +10,46 @@ const client = new AptosClient('https://fullnode.devnet.aptoslabs.com/v1');
 
 
 
+
 function WalletPayment() {
+    const { push } = useRouter();
     const [address, setAddress] = React.useState<string | null>(null);
+    const [timeRemaining, setTimeRemaining] = useState<number | null>(null);
 
     const init = async() => {
         const { address, publicKey } = await window.aptos.connect();
         setAddress(address);
       }
 
-      console.log(address)
+
+      useEffect(() => {
+          const duration = 10 * 60 * 1000; //10 minutes
+  
+          const startTime = localStorage.getItem('startTime');
+  
+          if (!startTime) {
+              const now = new Date().getTime();
+              localStorage.setItem('startTime', now.toString());
+              setTimeRemaining(duration);
+          } else {
+              const elapsed = new Date().getTime() - parseInt(startTime);
+              const remaining = duration - elapsed;
+              setTimeRemaining(remaining);
+          }
+      }, []);
+  
+      useEffect(() => {
+          if (timeRemaining !== null && timeRemaining > 0) {
+              const timer = setTimeout(() => {
+                  setTimeRemaining(timeRemaining - 1000);
+              }, 1000);
+  
+              return () => clearTimeout(timer);
+          } else if (timeRemaining !== null && timeRemaining <= 0) {
+                localStorage.removeItem('startTime');
+                push('/unsuccess');
+        }
+      }, [timeRemaining]);
 
     return (
         <div>
@@ -26,9 +58,12 @@ function WalletPayment() {
                     Pay the testshop    
                 </div>
                 <div>
-                    Time remaining
-                    <p className='text-red-600 '>09:59</p>
-                </div>
+            Time remaining
+            <p className='text-red-600 '>
+                {Math.floor(timeRemaining! / 60000).toString().padStart(2, '0')}:
+                {Math.floor((timeRemaining! % 60000) / 1000).toString().padStart(2, '0')}
+            </p>
+        </div>
 
             </div>
 
@@ -88,6 +123,37 @@ function WalletPayment() {
 
 function QRPayment() {
     const [copySuccess, setCopySuccess] = useState('');
+    const [timeRemaining, setTimeRemaining] = useState<number | null>(null);
+    const { push } = useRouter();
+
+    useEffect(() => {
+        const duration = 10 * 60 * 1000; //10 minutes
+
+        const startTime = localStorage.getItem('startTime');
+
+        if (!startTime) {
+            const now = new Date().getTime();
+            localStorage.setItem('startTime', now.toString());
+            setTimeRemaining(duration);
+        } else {
+            const elapsed = new Date().getTime() - parseInt(startTime);
+            const remaining = duration - elapsed;
+            setTimeRemaining(remaining);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (timeRemaining !== null && timeRemaining > 0) {
+            const timer = setTimeout(() => {
+                setTimeRemaining(timeRemaining - 1000);
+            }, 1000);
+
+            return () => clearTimeout(timer);
+        } else if (timeRemaining !== null && timeRemaining <= 0) {
+            localStorage.removeItem('startTime');
+            push('/unsuccess');
+      }
+    }, [timeRemaining]);
 
     const copyToClipboard = (text: string) => {
         navigator.clipboard.writeText(text)
@@ -105,9 +171,12 @@ function QRPayment() {
                     Pay the testshop 
                 </div>
                 <div>
-                    Time remaining
-                    <p className='text-red-600 '>09:59</p>
-                </div>
+            Time remaining
+            <p className='text-red-600 '>
+                {Math.floor(timeRemaining! / 60000).toString().padStart(2, '0')}:
+                {Math.floor((timeRemaining! % 60000) / 1000).toString().padStart(2, '0')}
+            </p>
+        </div>
 
             </div>
 
@@ -148,7 +217,6 @@ function QRPayment() {
 
 const Payment = () => {
     const [activeTab, setActiveTab] = useState('wallet');
-
 
   return (
     <div className="max-w-screen-sm flex flex-wrap items-center justify-between mx-auto p-4 mt-16">

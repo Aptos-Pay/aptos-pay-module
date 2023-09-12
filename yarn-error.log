@@ -1,0 +1,41 @@
+Arguments: 
+  C:\Program Files\nodejs\node.exe C:\Program Files\nodejs\node_modules\yarn\bin\yarn.js install
+
+PATH: 
+  C:\ProgramData\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Users\machy\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Program Files\Git\cmd;C:\Users\machy\AppData\Local\Microsoft\WindowsApps;C:\Users\machy\AppData\Local\GitHubDesktop\bin;C:\xampp\php;C:\Users\machy\AppData\Local\ComposerSetup\bin;C:\Users\machy\AppData\Roaming\Composer\vendor\bin;C:\Users\machy\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\machy\AppData\Roaming\npm;C:\Users\machy\AppData\Roaming\nvm;C:\Program Files\nodejs;
+
+Yarn version: 
+  1.22.19
+
+Node version: 
+  16.17.0
+
+Platform: 
+  win32 x64
+
+Trace: 
+  Error: EPERM: operation not permitted, unlink 'C:\xampp\htdocs\aptos-pay\main-website\node_modules\@next\swc-win32-x64-msvc\next-swc.win32-x64-msvc.node'
+
+npm manifest: 
+  {
+    "name": "@aptos-pay/monorepo",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+      "dev": "yarn workspace @aptos-pay/core-protocol dev",
+      "build": "yarn workspace @aptos-pay/core-protocol build",
+      "shopify-dev": "yarn workspace @aptos-pay/shopify-app dev",
+      "link-dev": "yarn workspace @aptos-pay/npm-package link && yarn workspace @aptos-pay/core-protocol link @aptos-pay/npm-package"
+    },
+    "workspaces": {
+      "packages": [
+        "./*"
+      ]
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
