@@ -61,14 +61,21 @@ function WalletPayment() {
                 </div>
             </div>
 
-            <div className='center flex w-full justify-center mt-28'>
-            {
-                    !address && <button onClick={init} className='border text-black w-full border-gray-800 rounded-xl h-12'> Connect Wallet </button>
+            <div className='center flex w-full justify-center mt-28 flex-col'>
+                {
+                    !address && 
+                    <button onClick={init} className='border text-black w-full border-gray-800 rounded-xl h-12 mb-2'> Connect Wallet </button>
                 }
                 {
-                    address && <button className='text-white w-full bg-black rounded-xl h-12'> Pay now </button>
+                    address && 
+                    <>
+                        <button disabled className='border text-black w-full border-gray-800 rounded-xl h-12 mb-2'>{address.substring(0, 4) + '...' + address.substring(address.length - 4)}</button>
+                        <button className='text-white w-full bg-black rounded-xl h-12'> Pay now </button>
+                    </>
                 }
             </div>
+
+
 
             
         </div>
