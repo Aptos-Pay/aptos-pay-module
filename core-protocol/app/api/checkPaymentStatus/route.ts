@@ -4,9 +4,17 @@ import { config } from 'dotenv';
 config({ path: '../.env' });
 
 export async function GET(request: Request) {
+  const referrer = request.headers.get('Referer');
+
+  if (!referrer) {
+      //handle no referrer error here
+    return;
+  }
+
   const params = new URLSearchParams(
-    request.url.slice(request.url.indexOf('?'))
+    referrer.slice(referrer.indexOf('?'))
   );
+
   const orderId = params.get('orderId');
 
   const paymentStatus = await checkPaymentStatus(
@@ -18,7 +26,7 @@ export async function GET(request: Request) {
   return NextResponse.json(
     {
       success: paymentStatus.success,
-      status: paymentStatus.status  ,
+      status: paymentStatus.status,
     },
     {
       status: 200,
