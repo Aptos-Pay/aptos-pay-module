@@ -170,6 +170,12 @@ const WalletPayment = () => {
                         <button onClick={payNow} className='text-white w-full bg-black rounded-xl h-12'> Pay now </button>
                     </>
                 }
+                {
+                    address && !paymentAddress &&
+                    <>
+                        <div className='spinner'></div>
+                    </>
+                }
             </div>
 
 

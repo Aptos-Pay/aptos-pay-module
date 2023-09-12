@@ -1,13 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import QRCode from 'qrcode.react';
+
+import Image from 'next/image';
+import copyIcon from '../Images/copy.png'
 
 const QrPayment = () => {
     const [copySuccess, setCopySuccess] = useState('');
     const [timeRemaining, setTimeRemaining] = useState<number | null>(null);
     const [amount, setAmount] = useState<string | null>("0");
-    const [orderId, setOrderId] = useState<number | null>(null);
-    const [paymentAddress, setPaymentAddress] = useState<string | null>(null);
+    const [paymentAddress, setPaymentAddress] = useState<string>("");
     const { push } = useRouter();
+
+    useEffect(() => {
+        setAmount('3.17');
+    }, []);
+    
+    const shoppingData = {
+        shopName: 'Aptos Shop',
+        cartPrice: '16.00',
+        transactionFee: '0.025',
+        usdPrice: '16.03',
+    }
 
     const init = async () => {
 
@@ -24,7 +38,6 @@ const QrPayment = () => {
         });
 
         const data = await response.json();
-        setOrderId(data.orderId)
 
         const paymentAddress = await fetch(`api/getPaymentAddressByUid?orderId=${data.orderId}`);
         const paymentAddressData = await paymentAddress.json();
@@ -71,14 +84,6 @@ const QrPayment = () => {
             .catch(err => console.error('Failed to copy text: ', err));
     };
 
-    const shoppingData = {
-        shopName: 'Aptos Shop',
-        cartPrice: '16.00',
-        transactionFee: '0.025',
-        usdPrice: '16.03',
-
-    }
-
     return (
         <div>
             <div className='flex justify-between'>
@@ -104,16 +109,28 @@ const QrPayment = () => {
             </div>
 
             <div className='place-content-center flex mt-5'>
-                <img src='https://via.placeholder.com/250' />
+                {
+                    paymentAddress && <QRCode value={paymentAddress} size={250} />
+                }
+                {
+                    !paymentAddress && <div className='spinner'></div>
+                }
             </div>
             <div className='place-content-center flex flex-col items-center'>
-                <p className="cursor-pointer" onClick={() => copyToClipboard('0x71ed1....1b24975')}>0x71ed1....1b24975</p>
+                {
+                    paymentAddress &&
+                    <div className="flex items-center mt-2 cursor-pointer" onClick={() => copyToClipboard(paymentAddress)}>
+                        <p className="mr-2">{paymentAddress.substring(0, 4)}...{paymentAddress.substring(paymentAddress.length - 4)}</p>
+                        <Image src={copyIcon} alt="copy" width={16} height={16} />
+                    </div>
+                }
+
                 {copySuccess && <div className='text-sm text-green-500 mt-2'>{copySuccess}</div>}
             </div>
 
 
 
-            <div className='p-2'>
+            <div className='p-2 mt-5'>
                 <div className='flex justify-between'>
                     <p className='text-xl'> Cart </p>
                     <p className='text-xl'> ${shoppingData.cartPrice} </p>
