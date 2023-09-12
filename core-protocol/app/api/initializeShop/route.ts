@@ -3,13 +3,8 @@ import { NextResponse } from 'next/server';
 import { config } from 'dotenv';
 config({ path: '../.env' });
 
-export async function POST(request: Request) {
+export async function POST() {
   try {
-    // const params = new URLSearchParams(
-    //   request.url.slice(request.url.indexOf('?'))
-    // );
-    // const address = params.get('address');
-
     const shopInitResult = await initShop(
       process.env.PRIVATE_KEY as string,
       process.env.MODULE_ADDRESS as string

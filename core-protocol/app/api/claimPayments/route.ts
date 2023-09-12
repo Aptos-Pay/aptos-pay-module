@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import { config } from 'dotenv';
 config({ path: '../.env' });
 
-export async function POST(request: Request) {
+export async function POST() {
   try {
     const claimPaymentsResult = await claimPayments(
       process.env.PRIVATE_KEY as string,

@@ -3,12 +3,12 @@ import { NextResponse } from 'next/server';
 import { config } from 'dotenv';
 config({ path: '../.env' });
 
-export async function POST(request: Request, response: Response) {
+export async function POST(request: Request) {
   try {
-    // const { receiverAddress, amount } = request.body;
+    const amount = (await request.json()).amount;
 
     const orderCreationResult = await createOrder(
-      8888,
+      amount,
       process.env.PRIVATE_KEY as string,
       process.env.MODULE_ADDRESS as string
     );
