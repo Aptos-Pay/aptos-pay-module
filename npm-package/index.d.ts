@@ -1,5 +1,4 @@
 declare function initShop(
-  shopOwnerAddress: string,
   privateKey: string,
   contractAddress: string
 ): Promise<{

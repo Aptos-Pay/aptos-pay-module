@@ -5,7 +5,7 @@ function deployContract() {
   // check if contract is deployed, if not, deploy it
 }
 
-async function initShop(shopOwnerAddress, privateKey, contractAddress) {
+async function initShop(privateKey, contractAddress) {
   const client = new AptosClient('https://fullnode.devnet.aptoslabs.com');
 
   if (!privateKey.startsWith('0x')) {
@@ -21,7 +21,7 @@ async function initShop(shopOwnerAddress, privateKey, contractAddress) {
       type: 'entry_function_payload',
       function: `${contractAddress}::aptospay::init`,
       type_arguments: [],
-      arguments: [shopOwnerAddress],
+      arguments: [walletData.address],
     });
 
     const submittedTx = await client.signAndSubmitTransaction(
