@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "yarn workspace @aptos-pay/core-protocol dev",
     "build": "yarn workspace @aptos-pay/core-protocol build",
-    "shopify-dev": "yarn workspace @aptos-pay/shopify-app dev"
+    "shopify-dev": "yarn workspace @aptos-pay/shopify-app dev",
+    "link-dev": "yarn workspace @aptos-pay/npm-package link && yarn workspace @aptos-pay/core-protocol link aptos-pay"
   },
   "workspaces": {
     "packages": [
