@@ -2,6 +2,7 @@ module owner::aptospay{
     use std::signer;
     use std::vector;
     use aptos_std::smart_table;
+    use aptos_framework::managed_coin;
     use aptos_std::smart_table::SmartTable;
     use aptos_framework::aptos_coin::AptosCoin;
     use aptos_framework::coin;    
@@ -50,19 +51,22 @@ module owner::aptospay{
         assert!(signer::address_of(contract_account) == @owner, EINVALID_DEDICATED_INITIALIZER);
 
         let initate_data = borrow_global_mut<InitateTxTable>(signer::address_of(contract_account));
-        let (order_wallet, order_wallet_cap) = account::create_resource_account(contract_account, x"01");
+        let bites = std::bcs :: to_bytes(&uid);
+        let (order_wallet, order_wallet_cap) = account::create_resource_account(contract_account, bites);
+        managed_coin::register<AptosCoin>(&order_wallet);
         
-
         smart_table::add(&mut initate_data.initateTxData, uid, InitateTx {
             uid,
             amount,
             order_wallet_cap,
         });
+        
     }
 
-    public entry fun get_all_payments(store_owner: address) acquires InitateTxTable, AptosPay {
+    public entry fun get_all_payments(store_owner: &signer) acquires InitateTxTable, AptosPay {
         let aptospay_resource = borrow_global_mut<AptosPay>(ADMIN);
-        assert!(aptospay_resource.store_owner == store_owner, ERR_NOT_STORE_OWNER);
+        let store_owner_wallet = signer::address_of(store_owner);
+        assert!(aptospay_resource.store_owner == store_owner_wallet, ERR_NOT_STORE_OWNER);
 
         let initate_data = borrow_global_mut<InitateTxTable>(ADMIN);
         
@@ -73,6 +77,13 @@ module owner::aptospay{
 
         coin::transfer<AptosCoin>(&order_wallet, aptospay_resource.store_owner, tx.amount);
         });
+    }
+
+    public entry fun set_store_owner(store_owner: &signer, new_store_owner: address) acquires AptosPay {
+        let store_owner_wallet = signer::address_of(store_owner);
+        let aptospay_resource = borrow_global_mut<AptosPay>(ADMIN);
+        assert!(aptospay_resource.store_owner == store_owner_wallet, ERR_NOT_STORE_OWNER);
+        aptospay_resource.store_owner = new_store_owner;
     }
 
     #[view]
@@ -100,5 +111,7 @@ module owner::aptospay{
             return false
         }
     }
+
+
 
 }
