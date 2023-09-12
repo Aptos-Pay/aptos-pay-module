@@ -64,7 +64,10 @@ function WalletPayment() {
             <div className='center flex w-full justify-center mt-28 flex-col'>
                 {
                     !address && 
+                    <>
                     <button onClick={init} className='border text-black w-full border-gray-800 rounded-xl h-12 mb-2'> Connect Wallet </button>
+                    <button disabled className='text-white w-full bg-black rounded-xl h-12 cursor-not-allowed'> Pay now </button>
+                    </>
                 }
                 {
                     address && 
