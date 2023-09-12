@@ -1,19 +1,31 @@
-declare function getTempWallet(): {
-  address: string;
-  privateKeyHex: string;
-  publicKeyHex: string;
-};
-declare function getBalance(address: string): Promise<string>;
-declare function performTx(
-  orderId: string,
+declare function initShop(
+  privateKey: string,
+  contractAddress: string
+): Promise<{
+  success: boolean;
+}>;
+declare function createOrder(
   amount: number,
-  receiver: string,
-  sender: string,
-  privateKey: string
+  privateKey: string,
+  contractAddress: string
+): Promise<{
+  success: boolean;
+  orderId: number;
+}>;
+declare function getPaymentAddressByUid(
+  orderId: string,
+  contractAddress: string
 );
+declare function checkPaymentStatus(
+  orderId: string,
+  contractAddress: string
+): Promise<{
+  success: boolean;
+  status: string;
+}>;
 
 declare namespace AptosPay {
-  export { getTempWallet, getBalance, performTx };
+  export { initShop, createOrder, getPaymentAddressByUid, checkPaymentStatus };
 }
 
 export = AptosPay;

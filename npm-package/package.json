@@ -13,6 +13,7 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "aptos": "^1.19.0"
+    "aptos": "^1.19.0",
+    "crypto": "^1.0.1"
   }
 }
