@@ -1,0 +1,16 @@
+[package]
+name = "aptospay"
+version = "1.0.0"
+authors = []
+
+[addresses]
+owner = "0xaa1cf4d69e7a86df0a3c410db1edd4b92ce7db50a42782cb61087d9a0df2d488"
+
+[dev-addresses]
+
+[dependencies.AptosFramework]
+git = "https://github.com/aptos-labs/aptos-core.git"
+rev = "mainnet"
+subdir = "aptos-move/framework/aptos-framework"
+
+[dev-dependencies]
