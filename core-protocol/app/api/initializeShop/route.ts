@@ -11,8 +11,8 @@ export async function POST(request: Request) {
     // const address = params.get('address');
 
     const shopInitResult = await initShop(
-      process.env.PRIVATE_KEY || '',
-      process.env.ADDRESS || '' //contract address (the same as public address)
+      process.env.PRIVATE_KEY as string,
+      process.env.MODULE_ADDRESS as string
     );
 
     if (!shopInitResult.success) {

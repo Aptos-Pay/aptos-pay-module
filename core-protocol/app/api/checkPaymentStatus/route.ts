@@ -5,8 +5,9 @@ config({ path: '../.env' });
 
 export async function GET(request: Request) {
   const paymentStatus = await checkPaymentStatus(
-    '001',
-    process.env.ADDRESS || ''
+    '3581487709',
+    process.env.ADDRESS as string,
+    process.env.MODULE_ADDRESS as string
   );
 
   return NextResponse.json(

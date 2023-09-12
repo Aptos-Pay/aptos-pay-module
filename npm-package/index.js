@@ -1,11 +1,7 @@
 import { AptosAccount, AptosClient } from 'aptos';
 import { HexString } from 'aptos';
 
-function deployContract() {
-  // check if contract is deployed, if not, deploy it
-}
-
-async function initShop(privateKey, contractAddress) {
+async function initShop(privateKey, moduleAddress) {
   const client = new AptosClient('https://fullnode.devnet.aptoslabs.com');
 
   if (!privateKey.startsWith('0x')) {
@@ -19,7 +15,7 @@ async function initShop(privateKey, contractAddress) {
   try {
     const rawTx = await client.generateTransaction(walletData.address, {
       type: 'entry_function_payload',
-      function: `${contractAddress}::aptospay::init`,
+      function: `${moduleAddress}::aptospay::init`,
       type_arguments: [],
       arguments: [walletData.address],
     });
@@ -50,7 +46,7 @@ async function initShop(privateKey, contractAddress) {
   }
 }
 
-async function createOrder(amount, privateKey, contractAddress) {
+async function createOrder(amount, privateKey, moduleAddress) {
   const client = new AptosClient('https://fullnode.devnet.aptoslabs.com');
 
   if (!privateKey.startsWith('0x')) {
@@ -70,7 +66,7 @@ async function createOrder(amount, privateKey, contractAddress) {
   try {
     const rawTx = await client.generateTransaction(walletData.address, {
       type: 'entry_function_payload',
-      function: `${contractAddress}::aptospay::create_order`,
+      function: `${moduleAddress}::aptospay::create_order`,
       type_arguments: [],
       arguments: [orderId, amount],
     });
@@ -104,26 +100,38 @@ async function createOrder(amount, privateKey, contractAddress) {
   }
 }
 
-async function getPaymentAddressByUid(orderId, contractAddress) {
-  const data = await new AptosClient(
-    'https://fullnode.devnet.aptoslabs.com'
-  ).view({
-    function: `${contractAddress}::aptospay::get_uid_payment_address`,
-    type_arguments: [],
-    arguments: [orderId],
-  });
-
-  return data[0];
-}
-
-async function checkPaymentStatus(orderId, contractAddress) {
+async function getPaymentAddressByUid(
+  orderId,
+  storeOwnerAddress,
+  moduleAddress
+) {
   try {
     const data = await new AptosClient(
       'https://fullnode.devnet.aptoslabs.com'
     ).view({
-      function: `${contractAddress}::aptospay::check_payment`,
+      function: `${moduleAddress}::aptospay::get_uid_payment_address`,
       type_arguments: [],
-      arguments: [orderId],
+      arguments: [orderId, storeOwnerAddress],
+    });
+
+    return data[0];
+  } catch (error) {
+    console.log(error);
+    return {
+      success: false,
+      status: 'ERROR',
+    };
+  }
+}
+
+async function checkPaymentStatus(orderId, storeOwnerAddress, moduleAddress) {
+  try {
+    const data = await new AptosClient(
+      'https://fullnode.devnet.aptoslabs.com'
+    ).view({
+      function: `${moduleAddress}::aptospay::check_payment`,
+      type_arguments: [],
+      arguments: [orderId, storeOwnerAddress],
     });
 
     if (data[0]) {
@@ -146,9 +154,58 @@ async function checkPaymentStatus(orderId, contractAddress) {
   }
 }
 
+async function claimPayments(privateKey, moduleAddress) {
+  const client = new AptosClient('https://fullnode.devnet.aptoslabs.com');
+
+  if (!privateKey.startsWith('0x')) {
+    privateKey = '0x' + privateKey;
+  }
+
+  const privateKeyBytes = HexString.ensure(privateKey).toUint8Array();
+  const adminWallet = new AptosAccount(privateKeyBytes);
+  const walletData = adminWallet.toPrivateKeyObject();
+
+  try {
+    const rawTx = await client.generateTransaction(walletData.address, {
+      type: 'entry_function_payload',
+      function: `${moduleAddress}::aptospay::get_all_payments`,
+      type_arguments: [],
+      arguments: [],
+    });
+
+    const submittedTx = await client.signAndSubmitTransaction(
+      adminWallet,
+      rawTx
+    );
+
+    const result = await client.waitForTransactionWithResult(submittedTx);
+
+    if (result.success === false) {
+      console.log('Transaction Failed');
+      console.log(result.vm_status);
+      return {
+        success: false,
+        message: 'ERROR',
+      };
+    }
+    return {
+      success: true,
+      message: 'Payments claimed',
+    };
+  } catch (error) {
+    console.log('Error ocurred');
+    console.log(error);
+    return {
+      success: false,
+      message: 'ERROR',
+    };
+  }
+}
+
 module.exports = {
   initShop,
   createOrder,
   getPaymentAddressByUid,
   checkPaymentStatus,
+  claimPayments,
 };

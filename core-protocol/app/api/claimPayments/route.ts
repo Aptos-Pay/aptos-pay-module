@@ -1,23 +1,20 @@
-import { createOrder } from 'aptos-pay';
+import { claimPayments } from 'aptos-pay';
 import { NextResponse } from 'next/server';
 import { config } from 'dotenv';
 config({ path: '../.env' });
 
-export async function POST(request: Request, response: Response) {
+export async function POST(request: Request) {
   try {
-    // const { receiverAddress, amount } = request.body;
-
-    const orderCreationResult = await createOrder(
-      8888,
+    const claimPaymentsResult = await claimPayments(
       process.env.PRIVATE_KEY as string,
       process.env.MODULE_ADDRESS as string
     );
 
-    if (!orderCreationResult.success) {
+    if (!claimPaymentsResult.success) {
       return NextResponse.json(
         {
           success: false,
-          message: 'Order creation failed',
+          message: 'Claiming payments failed',
         },
         {
           status: 400,
@@ -27,9 +24,8 @@ export async function POST(request: Request, response: Response) {
 
     return NextResponse.json(
       {
-        success: orderCreationResult.success,
-        message: 'Order created',
-        orderId: orderCreationResult.orderId,
+        success: claimPaymentsResult.success,
+        message: 'Claiming payments successful',
       },
       {
         status: 200,
