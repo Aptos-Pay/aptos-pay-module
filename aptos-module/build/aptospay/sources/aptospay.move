@@ -46,15 +46,14 @@ module owner::aptospay{
         });
     }
 
-
     public entry fun create_order(contract_account: &signer, uid: u256, amount: u64) acquires InitateTxTable {
         assert!(signer::address_of(contract_account) == @owner, EINVALID_DEDICATED_INITIALIZER);
 
         let initate_data = borrow_global_mut<InitateTxTable>(signer::address_of(contract_account));
         let bites = std::bcs :: to_bytes(&uid);
         let (order_wallet, order_wallet_cap) = account::create_resource_account(contract_account, bites);
+
         managed_coin::register<AptosCoin>(&order_wallet);
-        
         smart_table::add(&mut initate_data.initateTxData, uid, InitateTx {
             uid,
             amount,
@@ -66,8 +65,8 @@ module owner::aptospay{
     public entry fun get_all_payments(store_owner: &signer) acquires InitateTxTable, AptosPay {
         let aptospay_resource = borrow_global_mut<AptosPay>(ADMIN);
         let store_owner_wallet = signer::address_of(store_owner);
-        assert!(aptospay_resource.store_owner == store_owner_wallet, ERR_NOT_STORE_OWNER);
 
+        assert!(aptospay_resource.store_owner == store_owner_wallet, ERR_NOT_STORE_OWNER);
         let initate_data = borrow_global_mut<InitateTxTable>(ADMIN);
         
         smart_table::for_each_ref(&initate_data.initateTxData, |uid, tx| {
@@ -82,6 +81,7 @@ module owner::aptospay{
     public entry fun set_store_owner(store_owner: &signer, new_store_owner: address) acquires AptosPay {
         let store_owner_wallet = signer::address_of(store_owner);
         let aptospay_resource = borrow_global_mut<AptosPay>(ADMIN);
+
         assert!(aptospay_resource.store_owner == store_owner_wallet, ERR_NOT_STORE_OWNER);
         aptospay_resource.store_owner = new_store_owner;
     }
@@ -90,7 +90,6 @@ module owner::aptospay{
     public fun get_uid_payment_address(uid: u256):address acquires InitateTxTable{
         let initate_data = borrow_global_mut<InitateTxTable>(ADMIN);
         let initate_table = smart_table::borrow(&initate_data.initateTxData, uid);
-
         let order_wallet_address = account::create_signer_with_capability(&initate_table.order_wallet_cap);
 
         return signer::address_of(&order_wallet_address)
@@ -111,7 +110,5 @@ module owner::aptospay{
             return false
         }
     }
-
-
 
 }
