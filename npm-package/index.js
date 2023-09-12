@@ -64,6 +64,18 @@ async function createOrder(amount, privateKey, contractAddress) {
   }
 }
 
+async function getPaymentAddressByUid(orderId, contractAddress) {
+  const data = await new AptosClient(
+    'https://fullnode.devnet.aptoslabs.com'
+  ).view({
+    function: `${contractAddress}::aptospay::get_uid_payment_address`,
+    type_arguments: [],
+    arguments: [orderId],
+  });
+
+  return data[0];
+}
+
 async function getBalance(address) {
   // const provider = new Provider(Network.TESTNET);
   // const account = await provider.getAccount(address);
@@ -83,4 +95,5 @@ module.exports = {
   getTempWallet,
   getBalance,
   createOrder,
+  getPaymentAddressByUid,
 };

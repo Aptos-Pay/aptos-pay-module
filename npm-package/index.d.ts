@@ -12,9 +12,13 @@ declare function createOrder(
   success: boolean;
   orderId: number;
 }>;
+declare function getPaymentAddressByUid(
+  orderId: string,
+  contractAddress: string
+);
 
 declare namespace AptosPay {
-  export { getTempWallet, getBalance, createOrder };
+  export { getTempWallet, getBalance, createOrder, getPaymentAddressByUid };
 }
 
 export = AptosPay;
