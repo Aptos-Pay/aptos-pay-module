@@ -5,18 +5,31 @@ config({ path: '../.env' });
 
 export async function GET(request: Request) {
   const referrer = request.headers.get('Referer');
+  let orderId;
 
   if (!referrer) {
-      //handle no referrer error here
-    return;
+    const orderIdParam = new URLSearchParams(
+      request.url.slice(request.url.indexOf('?'))
+    );
+  
+    orderId = orderIdParam.get('orderId');
+  } else{
+    const params = new URLSearchParams(
+      referrer.slice(referrer.indexOf('?'))
+    );
+  
+    orderId = params.get('orderId');
   }
 
-  const params = new URLSearchParams(
-    referrer.slice(referrer.indexOf('?'))
-  );
+  if (!orderId) {
+    const orderIdParam = new URLSearchParams(
+      request.url.slice(request.url.indexOf('?'))
+    );
+  
+    orderId = orderIdParam.get('orderId');
+  }
 
-  const orderId = params.get('orderId');
-
+  
   const paymentStatus = await checkPaymentStatus(
     orderId as string,
     process.env.ADDRESS as string,

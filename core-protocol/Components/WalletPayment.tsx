@@ -1,6 +1,7 @@
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { Types, AptosClient } from 'aptos';
+import { log } from 'console';
 
 // Create an AptosClient to interact with devnet.
 const client = new AptosClient('https://fullnode.devnet.aptoslabs.com/v1');
@@ -57,10 +58,12 @@ const WalletPayment = () => {
                 pendingTransaction.hash,
             );
             if (txn) {
+                localStorage.removeItem('startTime');
                 push(`/progress?orderId=${orderId}`);
             }
         } catch (error) {
             console.error("Error submitting transaction:", error)
+            localStorage.removeItem('startTime');
             push('/unsuccess');
         }
     }

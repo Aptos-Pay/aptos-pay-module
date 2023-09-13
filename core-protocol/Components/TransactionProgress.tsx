@@ -40,7 +40,7 @@ const TransactionProgress = () => {
                     clearInterval(interval);
                     setTimeout(() => {
                         push('/success');
-                    }, 2000);
+                    }, 500);
                 }
             } catch (error) {
                 console.error("Error fetching payment status:", error);

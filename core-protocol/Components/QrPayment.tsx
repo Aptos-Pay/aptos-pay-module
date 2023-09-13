@@ -4,18 +4,20 @@ import QRCode from 'qrcode.react';
 
 import Image from 'next/image';
 import copyIcon from '../Images/copy.png'
+import axios from 'axios';
 
 const QrPayment = () => {
     const [copySuccess, setCopySuccess] = useState('');
     const [timeRemaining, setTimeRemaining] = useState<number | null>(null);
     const [amount, setAmount] = useState<string | null>("0");
+    const [orderId, setOrderId] = useState<string>("");
     const [paymentAddress, setPaymentAddress] = useState<string>("");
     const { push } = useRouter();
 
     useEffect(() => {
-        setAmount('3.17');
+        setAmount('0.1');
     }, []);
-    
+
     const shoppingData = {
         shopName: 'Aptos Shop',
         cartPrice: '16.00',
@@ -26,7 +28,7 @@ const QrPayment = () => {
     const init = async () => {
 
         let amountJson = {
-            amount: amount
+            amount: '0.1'
         }
 
         const response = await fetch('api/createOrder', {
@@ -39,9 +41,38 @@ const QrPayment = () => {
 
         const data = await response.json();
 
+        let orderId = data.orderId;
+
         const paymentAddress = await fetch(`api/getPaymentAddressByUid?orderId=${data.orderId}`);
         const paymentAddressData = await paymentAddress.json();
         setPaymentAddress(paymentAddressData.paymentAddress);
+
+        const interval = setInterval(async () => {
+            try {
+                const params = new URLSearchParams();
+                params.append('orderId', orderId);
+                const options = {
+                    method: 'GET',
+                    url: 'api/checkPaymentStatus',
+                    params: params,
+                    headers: {
+                        accept: 'application/json',
+                    },
+                };
+                const req = await axios.request(options)
+                // const response = await fetch('api/checkPaymentStatus?orderId=' + orderId);
+                const data = await req.data;
+
+
+                if (data.status === 'COMPLETED') {
+                    clearInterval(interval);
+                    localStorage.removeItem('startTime');
+                    push('/success');
+                }
+            } catch (error) {
+                console.error("Error fetching payment status:", error);
+            }
+        }, 5000);
 
     }
 
@@ -83,6 +114,8 @@ const QrPayment = () => {
             })
             .catch(err => console.error('Failed to copy text: ', err));
     };
+
+
 
     return (
         <div>
