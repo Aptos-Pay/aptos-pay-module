@@ -37,7 +37,7 @@ import {
 
 ## API Reference
 
-# 1. IniShop
+# 1. InitShop
 ```bash
 function initShop(privateKey: string, moduleAddress: string): Promise<{ success: boolean; }>
 ```
