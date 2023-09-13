@@ -98,14 +98,14 @@ const WalletPayment = () => {
 
 
     useEffect(() => {
-        setAmount('3.17'); //16 usd
+        setAmount('0.1'); //18 usd - 3.53
     }, []);
 
     const shoppingData = {
         shopName: 'Aptos Shop',
-        cartPrice: '16.00',
+        cartPrice: '18.00',
         transactionFee: '0.025',
-        usdPrice: '16.03',
+        usdPrice: '18.03',
 
     }
 
