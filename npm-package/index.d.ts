@@ -19,7 +19,7 @@ declare function getPaymentAddressByUid(
   storeOwnerAddress: string,
   moduleAddress: string,
   nodeUrl?: string
-);
+): Promise<string>;
 declare function checkPaymentStatus(
   orderId: string,
   storeOwnerAddress: string,
