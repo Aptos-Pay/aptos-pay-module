@@ -1,8 +1,9 @@
 import { AptosAccount, AptosClient } from 'aptos';
 import { HexString } from 'aptos';
 
-async function initShop(privateKey, moduleAddress) {
-  const client = new AptosClient('https://fullnode.devnet.aptoslabs.com');
+const DEVNET_NODE = 'https://fullnode.devnet.aptoslabs.com';
+async function initShop(privateKey, moduleAddress, NODE_URL = DEVNET_NODE) {
+  const client = new AptosClient(NODE_URL);
 
   if (!privateKey.startsWith('0x')) {
     privateKey = '0x' + privateKey;
@@ -44,8 +45,13 @@ async function initShop(privateKey, moduleAddress) {
   }
 }
 
-async function createOrder(amount, privateKey, moduleAddress) {
-  const client = new AptosClient('https://fullnode.devnet.aptoslabs.com');
+async function createOrder(
+  amount,
+  privateKey,
+  moduleAddress,
+  NODE_URL = DEVNET_NODE
+) {
+  const client = new AptosClient(NODE_URL);
 
   if (!privateKey.startsWith('0x')) {
     privateKey = '0x' + privateKey;
@@ -99,12 +105,11 @@ async function createOrder(amount, privateKey, moduleAddress) {
 async function getPaymentAddressByUid(
   orderId,
   storeOwnerAddress,
-  moduleAddress
+  moduleAddress,
+  NODE_URL = DEVNET_NODE
 ) {
   try {
-    const data = await new AptosClient(
-      'https://fullnode.devnet.aptoslabs.com'
-    ).view({
+    const data = await new AptosClient(NODE_URL).view({
       function: `${moduleAddress}::aptospay::get_uid_payment_address`,
       type_arguments: [],
       arguments: [orderId, storeOwnerAddress],
@@ -120,11 +125,14 @@ async function getPaymentAddressByUid(
   }
 }
 
-async function checkPaymentStatus(orderId, storeOwnerAddress, moduleAddress) {
+async function checkPaymentStatus(
+  orderId,
+  storeOwnerAddress,
+  moduleAddress,
+  NODE_URL = DEVNET_NODE
+) {
   try {
-    const data = await new AptosClient(
-      'https://fullnode.devnet.aptoslabs.com'
-    ).view({
+    const data = await new AptosClient(NODE_URL).view({
       function: `${moduleAddress}::aptospay::check_payment`,
       type_arguments: [],
       arguments: [orderId, storeOwnerAddress],
@@ -150,8 +158,12 @@ async function checkPaymentStatus(orderId, storeOwnerAddress, moduleAddress) {
   }
 }
 
-async function claimPayments(privateKey, moduleAddress) {
-  const client = new AptosClient('https://fullnode.devnet.aptoslabs.com');
+async function claimPayments(
+  privateKey,
+  moduleAddress,
+  NODE_URL = DEVNET_NODE
+) {
+  const client = new AptosClient(NODE_URL);
 
   if (!privateKey.startsWith('0x')) {
     privateKey = '0x' + privateKey;
