@@ -28,8 +28,7 @@ async function initShop(privateKey, moduleAddress) {
     const result = await client.waitForTransactionWithResult(submittedTx);
 
     if (result.success === false) {
-      console.log('Transaction Failed');
-      console.log(result.vm_status);
+      console.log('Transaction Failed When Initializing', result.vm_status);
       return {
         success: false,
       };
@@ -38,8 +37,7 @@ async function initShop(privateKey, moduleAddress) {
       success: true,
     };
   } catch (error) {
-    console.log('Error ocurred');
-    console.log(error);
+    console.log('AptosPay Error: ', error);
     return {
       success: false,
     };
@@ -79,8 +77,7 @@ async function createOrder(amount, privateKey, moduleAddress) {
     const result = await client.waitForTransactionWithResult(submittedTx);
 
     if (result.success === false) {
-      console.log('Transaction Failed');
-      console.log(result.vm_status);
+      console.log('Transaction Failed When Creating Order', result.vm_status);
       return {
         success: false,
         orderId: undefined,
@@ -91,8 +88,7 @@ async function createOrder(amount, privateKey, moduleAddress) {
       orderId,
     };
   } catch (error) {
-    console.log('Error ocurred');
-    console.log(error);
+    console.log('AptosPay Error: ', error);
     return {
       success: false,
       orderId: undefined,
@@ -116,7 +112,7 @@ async function getPaymentAddressByUid(
 
     return data[0];
   } catch (error) {
-    console.log(error);
+    console.log('AptosPay Error: ', error);
     return {
       success: false,
       status: 'ERROR',
@@ -146,7 +142,7 @@ async function checkPaymentStatus(orderId, storeOwnerAddress, moduleAddress) {
       status: 'WAITING_FOR_PAYMENT',
     };
   } catch (error) {
-    console.log(error);
+    console.log('AptosPay Error: ', error);
     return {
       success: false,
       status: 'ERROR',
@@ -181,8 +177,7 @@ async function claimPayments(privateKey, moduleAddress) {
     const result = await client.waitForTransactionWithResult(submittedTx);
 
     if (result.success === false) {
-      console.log('Transaction Failed');
-      console.log(result.vm_status);
+      console.log('Transaction Failed When Claiming', result.vm_status);
       return {
         success: false,
         message: 'ERROR',
@@ -193,8 +188,7 @@ async function claimPayments(privateKey, moduleAddress) {
       message: 'Payments claimed',
     };
   } catch (error) {
-    console.log('Error ocurred');
-    console.log(error);
+    console.log('AptosPay Error: ', error);
     return {
       success: false,
       message: 'ERROR',
