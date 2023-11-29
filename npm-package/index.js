@@ -2,6 +2,7 @@ import { AptosAccount, AptosClient } from 'aptos';
 import { HexString } from 'aptos';
 
 const DEVNET_NODE = 'https://fullnode.devnet.aptoslabs.com';
+
 async function initShop(privateKey, moduleAddress, NODE_URL = DEVNET_NODE) {
   const client = new AptosClient(NODE_URL);
 
@@ -28,7 +29,7 @@ async function initShop(privateKey, moduleAddress, NODE_URL = DEVNET_NODE) {
 
     const result = await client.waitForTransactionWithResult(submittedTx);
 
-    if (result.success === false) {
+    if (!result?.success) {
       console.log('Transaction Failed When Initializing', result.vm_status);
       return {
         success: false,
@@ -82,7 +83,7 @@ async function createOrder(
 
     const result = await client.waitForTransactionWithResult(submittedTx);
 
-    if (result.success === false) {
+    if (!result?.success) {
       console.log('Transaction Failed When Creating Order', result.vm_status);
       return {
         success: false,
@@ -188,7 +189,7 @@ async function claimPayments(
 
     const result = await client.waitForTransactionWithResult(submittedTx);
 
-    if (result.success === false) {
+    if (!result?.success) {
       console.log('Transaction Failed When Claiming', result.vm_status);
       return {
         success: false,
