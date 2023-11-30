@@ -25,7 +25,7 @@ export async function POST() {
     return NextResponse.json(
       {
         success: shopInitResult.success,
-        message: 'Shop init successfull',
+        message: 'Shop init successful',
       },
       {
         status: 200,
